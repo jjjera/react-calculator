@@ -1,23 +1,53 @@
-import React from 'react';
+import React,{useState} from 'react';
 import logo from './logo.svg';
 import './App.css';
+import KeyPad from './components/Keypad'
+import Result from './components/Result'
 
-function App() {
-  return (
+function App(props) {
+
+  const [result, setResult] = useState('');
+
+  const onClick = (button) => {
+    switch(button){
+      case '=':
+      calculate();
+      break;
+      case 'C':
+      reset();
+      break;
+      case "CE":
+      backspace();
+      break;
+      default :
+      setResult(result + button);
+    }
+  }
+
+    const  calculate = () => {
+        try {
+            setResult((eval(result) || "" ) + "")
+        } catch (e) {
+            setResult("Error")
+        }
+    };
+
+    const reset = () => {
+        setResult("")
+    };
+
+    const backspace = () => {
+        setResult(result.slice(0, -1))
+    };
+
+    return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+         Calculator
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <Result result={result}/>
+        <KeyPad onClick={onClick}/>
       </header>
     </div>
   );
